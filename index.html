@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub - Your college academic resource portal. Find notes, PYQs, lab manuals, and more.">
+  <title>CampusHub - College Academic Resource Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="welcome-page">
+    <div class="container">
+      <div class="welcome-content">
+        <!-- Logo -->
+        <div class="welcome-logo">
+          <img src="assets/logo.svg" alt="CampusHub Logo" class="logo-large">
+        </div>
+
+        <!-- Brand Name -->
+        <h1 class="welcome-title">CampusHub</h1>
+
+        <!-- CTA Button -->
+        <div class="welcome-cta">
+          <a href="home.html" class="btn btn-primary btn-lg">
+            Enter CampusHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .welcome-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e3a5f 0%, #4a90e2 50%, #3498db 100%);
+      padding: var(--spacing-lg);
+      position: relative;
+      overflow: hidden;
+      margin: 0;
+    }
+
+    .welcome-page::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .welcome-content {
+      text-align: center;
+      max-width: 600px;
+      color: var(--color-white);
+      position: relative;
+      z-index: 1;
+      margin: 0 auto;
+      padding: var(--spacing-xl);
+    }
+
+    .welcome-logo {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .logo-large {
+      width: 120px;
+      height: 120px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .welcome-title {
+      font-size: var(--font-size-4xl);
+      font-weight: 700;
+      color: var(--color-white);
+      margin-bottom: var(--spacing-xl);
+      animation: slideUp 0.6s ease-out 0.2s both;
+    }
+
+    .welcome-cta {
+      animation: slideUp 0.6s ease-out 0.3s both;
+    }
+
+    .welcome-cta .btn {
+      padding: var(--spacing-md) var(--spacing-2xl);
+      font-size: var(--font-size-lg);
+      background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+      color: var(--color-navy-primary);
+      border: none;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      transition: all var(--transition-base);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .welcome-cta .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, #ffffff 0%, #e8f4fc 100%);
+    }
+
+    .welcome-footer {
+      font-size: var(--font-size-sm);
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+      animation: slideUp 0.6s ease-out 0.6s both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .welcome-content {
+        padding: var(--spacing-lg);
+      }
+
+      .logo-large {
+        width: 100px;
+        height: 100px;
+      }
+
+      .welcome-title {
+        font-size: var(--font-size-3xl);
+      }
+
+      .welcome-tagline {
+        font-size: var(--font-size-lg);
+      }
+
+      .welcome-description {
+        font-size: var(--font-size-sm);
+      }
+
+      .welcome-cta .btn {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-lg);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-large {
+        width: 80px;
+        height: 80px;
+      }
+
+      .welcome-title {
+        font-size: var(--font-size-2xl);
+      }
+
+      .welcome-tagline {
+        font-size: var(--font-size-base);
+      }
+    }
+  </style>
+</body>
+</html>

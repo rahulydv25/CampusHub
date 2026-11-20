@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Upload - Share your academic resources with the community">
+  <title>Upload Resource - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link active">Upload</a></li>
+        <li><a href="admin.html" class="nav-link hidden" id="adminLink">Admin</a></li>
+        <li><a href="login.html" class="nav-link" id="loginLink">Login</a></li>
+        <li><a href="#" class="nav-link hidden" id="logoutLink">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Upload Resource</h1>
+      <p class="page-subtitle">Share your academic materials with the community</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Authentication Required Message -->
+    <div id="authRequired" class="alert alert-warning mb-xl hidden">
+      <p><strong>Login Required:</strong> You must be logged in to upload resources.</p>
+      <a href="login.html" class="btn btn-primary btn-sm mt-sm">Login to Continue</a>
+    </div>
+
+    <!-- Upload Form -->
+    <div class="container-sm" id="uploadFormContainer">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Resource Details</h2>
+        </div>
+        <div class="card-body">
+          <form id="uploadForm">
+            <!-- Resource Title -->
+            <div class="form-group">
+              <label class="form-label" for="resourceTitle">Resource Title *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="resourceTitle"
+                name="title"
+                required
+                placeholder="e.g., Data Structures - Chapter 1 Notes"
+                maxlength="200"
+              >
+              <small class="text-muted text-sm">Max 200 characters</small>
+            </div>
+
+            <!-- Department -->
+            <div class="form-group">
+              <label class="form-label" for="resourceDepartment">Department *</label>
+              <select class="form-control" id="resourceDepartment" name="department" required>
+                <option value="">Select Department</option>
+                <option value="CSE">Computer Science & Engineering</option>
+                <option value="ECE">Electronics & Communication</option>
+                <option value="EEE">Electrical & Electronics</option>
+                <option value="MECH">Mechanical Engineering</option>
+                <option value="CIVIL">Civil Engineering</option>
+                <option value="IT">Information Technology</option>
+              </select>
+            </div>
+
+            <!-- Semester -->
+            <div class="form-group">
+              <label class="form-label" for="resourceSemester">Semester *</label>
+              <select class="form-control" id="resourceSemester" name="semester" required>
+                <option value="">Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+
+            <!-- Subject -->
+            <div class="form-group">
+              <label class="form-label" for="resourceSubject">Subject *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="resourceSubject"
+                name="subject"
+                required
+                placeholder="e.g., Data Structures and Algorithms"
+                maxlength="100"
+              >
+              <small class="text-muted text-sm">Max 100 characters</small>
+            </div>
+
+            <!-- Resource Category -->
+            <div class="form-group">
+              <label class="form-label" for="resourceCategory">Category *</label>
+              <select class="form-control" id="resourceCategory" name="category" required>
+                <option value="">Select Category</option>
+                <option value="notes">Class Notes</option>
+                <option value="pyq">Previous Year Question Paper</option>
+                <option value="lab_manual">Lab Manual</option>
+                <option value="assignment">Assignment</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+              <label class="form-label" for="resourceDescription">Description</label>
+              <textarea
+                class="form-control"
+                id="resourceDescription"
+                name="description"
+                rows="4"
+                placeholder="Brief description of the resource content..."
+                maxlength="500"
+              ></textarea>
+              <small class="text-muted text-sm">Max 500 characters (optional)</small>
+            </div>
+
+            <!-- File Upload -->
+            <div class="form-group">
+              <label class="form-label" for="resourceFile">PDF File *</label>
+              <input
+                type="file"
+                class="form-control"
+                id="resourceFile"
+                name="file"
+                accept=".pdf"
+                required
+              >
+              <small class="text-muted text-sm">
+                Only PDF files allowed. Maximum file size: 10 MB.
+              </small>
+            </div>
+
+            <!-- File Preview -->
+            <div id="filePreview" class="mb-lg hidden">
+              <div class="alert alert-info">
+                <p class="mb-0"><strong>Selected file:</strong> <span id="fileName"></span></p>
+                <p class="mb-0 text-sm"><strong>Size:</strong> <span id="fileSize"></span></p>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group mb-0">
+              <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+                <span id="submitText">Submit for Review</span>
+                <span id="submitLoading" class="loading hidden"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Upload Guidelines -->
+      <div class="card mt-xl">
+        <div class="card-header">
+          <h3 class="card-title">Upload Guidelines</h3>
+        </div>
+        <div class="card-body">
+          <ul style="list-style-position: inside; line-height: 2;">
+            <li>Only upload academic materials you have permission to share</li>
+            <li>Ensure the PDF is readable and properly formatted</li>
+            <li>Provide accurate and descriptive titles</li>
+            <li>Select the correct department, semester, and category</li>
+            <li>All submissions are reviewed by administrators before approval</li>
+            <li>You will earn contribution points after your resource is approved</li>
+            <li>Duplicate or inappropriate content will be rejected</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Submissions -->
+    <section class="mt-xl" id="mySubmissionsSection">
+      <h2 class="mb-lg">My Submissions</h2>
+      <div id="mySubmissions">
+        <!-- User's submissions will be loaded here -->
+        <div class="empty-state">
+          <div class="empty-state-icon">📤</div>
+          <div class="empty-state-title">No submissions yet</div>
+          <div class="empty-state-text">Your submitted resources will appear here</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/upload.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize authentication
+    auth.initAuth();
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // File input change handler
+    document.getElementById('resourceFile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Validate file type
+        if (file.type !== 'application/pdf') {
+          alert('Please upload a PDF file only.');
+          this.value = '';
+          document.getElementById('filePreview').classList.add('hidden');
+          return;
+        }
+
+        // Validate file size (10 MB = 10 * 1024 * 1024 bytes)
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+          alert('File size exceeds 10 MB limit. Please upload a smaller file.');
+          this.value = '';
+          document.getElementById('filePreview').classList.add('hidden');
+          return;
+        }
+
+        // Show file preview
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+        document.getElementById('filePreview').classList.remove('hidden');
+      } else {
+        document.getElementById('filePreview').classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Leaderboard - Top contributors and their achievements">
+  <title>Leaderboard - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link active">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="admin.html" class="nav-link hidden" id="adminLink">Admin</a></li>
+        <li><a href="login.html" class="nav-link" id="loginLink">Login</a></li>
+        <li><a href="#" class="nav-link hidden" id="logoutLink">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Contributor Leaderboard</h1>
+      <p class="page-subtitle">Celebrate our top contributors and their achievements</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Time Period Tabs -->
+    <div class="flex gap-md mb-xl">
+      <button class="btn btn-primary" id="allTimeTab">All Time</button>
+      <button class="btn btn-secondary" id="weeklyTab">This Week</button>
+    </div>
+
+    <!-- Top 3 Podium -->
+    <section class="mb-xl">
+      <div class="grid grid-cols-3 gap-lg" id="topThree">
+        <!-- Top 3 contributors will be loaded dynamically -->
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <div class="empty-state-icon">🏆</div>
+          <div class="empty-state-title">No contributors yet</div>
+          <div class="empty-state-text">Be the first to contribute and earn points!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Leaderboard Table -->
+    <section class="mb-xl">
+      <h2 class="mb-lg">Full Rankings</h2>
+      <div class="table-responsive">
+        <table class="leaderboard-table" id="leaderboardTable">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Contributor</th>
+              <th>Points</th>
+              <th>Resources</th>
+              <th>Badges</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <!-- Leaderboard rows will be loaded dynamically -->
+            <tr>
+              <td colspan="5" class="text-center">
+                <div class="empty-state py-lg">
+                  <div class="empty-state-title">No rankings yet</div>
+                  <div class="empty-state-text">Start contributing to appear on the leaderboard!</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Your Rank -->
+    <section class="mb-xl" id="yourRankSection">
+      <div class="card" style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%); color: white;">
+        <div class="card-body">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 style="color: white; margin: 0;">Your Rank</h3>
+              <p class="text-sm" style="color: rgba(255,255,255,0.8); margin: var(--spacing-xs) 0 0 0;">Log in to see your position</p>
+            </div>
+            <div class="text-right">
+              <a href="login.html" class="btn btn-secondary btn-sm">Login to View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Point System Info -->
+    <section class="mb-xl">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Point System</h3>
+        </div>
+        <div class="card-body">
+          <p class="mb-md">Earn points by contributing approved academic resources:</p>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid var(--color-gray-200);">
+              <td style="padding: var(--spacing-sm);">Class Notes</td>
+              <td style="padding: var(--spacing-sm); text-align: right; font-weight: 600;">10 points</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-gray-200);">
+              <td style="padding: var(--spacing-sm);">Previous Year Question Paper</td>
+              <td style="padding: var(--spacing-sm); text-align: right; font-weight: 600;">15 points</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--color-gray-200);">
+              <td style="padding: var(--spacing-sm);">Lab Manual</td>
+              <td style="padding: var(--spacing-sm); text-align: right; font-weight: 600;">10 points</td>
+            </tr>
+            <tr>
+              <td style="padding: var(--spacing-sm);">Assignment Resource</td>
+              <td style="padding: var(--spacing-sm); text-align: right; font-weight: 600;">5 points</td>
+            </tr>
+          </table>
+          <p class="mt-md text-sm text-muted">
+            <strong>Note:</strong> Points are awarded only after admin approval. Duplicate or rejected resources earn zero points.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges Info -->
+    <section>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Contributor Badges</h3>
+        </div>
+        <div class="card-body">
+          <div class="grid grid-cols-3 gap-md">
+            <div class="text-center p-md" style="background-color: var(--color-blue-light); border-radius: var(--radius-md);">
+              <div style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-sm);">🌟</div>
+              <h4 style="font-size: var(--font-size-base); margin-bottom: var(--spacing-xs);">Helpful Contributor</h4>
+              <p class="text-sm text-muted">5+ approved resources</p>
+            </div>
+            <div class="text-center p-md" style="background-color: var(--color-blue-light); border-radius: var(--radius-md);">
+              <div style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-sm);">📚</div>
+              <h4 style="font-size: var(--font-size-base); margin-bottom: var(--spacing-xs);">Study Champion</h4>
+              <p class="text-sm text-muted">15+ approved resources</p>
+            </div>
+            <div class="text-center p-md" style="background-color: var(--color-blue-light); border-radius: var(--radius-md);">
+              <div style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-sm);">🏆</div>
+              <h4 style="font-size: var(--font-size-base); margin-bottom: var(--spacing-xs);">Top Contributor</h4>
+              <p class="text-sm text-muted">Top 10 all-time ranking</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/leaderboard.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize authentication
+    auth.initAuth();
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Tab switching
+    document.getElementById('allTimeTab').addEventListener('click', function() {
+      this.classList.remove('btn-secondary');
+      this.classList.add('btn-primary');
+      document.getElementById('weeklyTab').classList.remove('btn-primary');
+      document.getElementById('weeklyTab').classList.add('btn-secondary');
+      // Load all-time leaderboard
+      if (window.loadLeaderboard) {
+        window.loadLeaderboard('all-time');
+      }
+    });
+
+    document.getElementById('weeklyTab').addEventListener('click', function() {
+      this.classList.remove('btn-secondary');
+      this.classList.add('btn-primary');
+      document.getElementById('allTimeTab').classList.remove('btn-primary');
+      document.getElementById('allTimeTab').classList.add('btn-secondary');
+      // Load weekly leaderboard
+      if (window.loadLeaderboard) {
+        window.loadLeaderboard('weekly');
+      }
+    });
+  </script>
+</body>
+</html>

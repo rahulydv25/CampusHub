@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Login - Access your account">
+  <title>Login - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="login.html" class="nav-link active">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Login</h1>
+      <p class="page-subtitle">Access your CampusHub account</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="container-sm">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Welcome Back</h2>
+        </div>
+        <div class="card-body">
+          <!-- Login Form -->
+          <form id="loginForm">
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="loginEmail">Email Address *</label>
+              <input
+                type="email"
+                class="form-control"
+                id="loginEmail"
+                name="email"
+                required
+                placeholder="your.email@college.edu"
+                autocomplete="email"
+              >
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" for="loginPassword">Password *</label>
+              <div class="flex gap-sm">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  name="password"
+                  required
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
+                >
+                <button type="button" class="btn btn-secondary" id="togglePassword" aria-label="Toggle password visibility">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="form-group">
+              <label class="flex items-center gap-sm">
+                <input type="checkbox" id="rememberMe" name="remember">
+                <span class="text-sm">Remember me</span>
+              </label>
+            </div>
+
+            <!-- Error Message -->
+            <div id="loginError" class="alert alert-danger hidden">
+              <!-- Error messages will appear here -->
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group mb-0">
+              <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                <span id="loginText">Login</span>
+                <span id="loginLoading" class="loading hidden"></span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Divider -->
+          <div class="text-center my-lg">
+            <span class="text-muted text-sm">or</span>
+          </div>
+
+          <!-- Register Link -->
+          <div class="text-center">
+            <p class="text-sm text-muted">
+              Don't have an account?
+              <a href="register.html" class="btn btn-sm btn-secondary">Register</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Tips -->
+      <div class="card mt-xl">
+        <div class="card-header">
+          <h3 class="card-title">Login Tips</h3>
+        </div>
+        <div class="card-body">
+          <ul style="list-style-position: inside; line-height: 2;">
+            <li>Use your college email address for registration</li>
+            <li>Password must be at least 6 characters long</li>
+            <li>If you forgot your password, contact the administrator</li>
+            <li>Login is required to upload resources and track your contributions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('loginPassword');
+      const toggleBtn = this;
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    });
+
+    // Login form submission (placeholder - will be connected to Supabase Auth)
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+
+      // Clear previous error
+      document.getElementById('loginError').classList.add('hidden');
+
+      // Basic validation
+      if (!email || !password) {
+        document.getElementById('loginError').textContent = 'Please fill in all fields.';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('loginError').textContent = 'Please enter a valid email address.';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+
+      // Show loading state
+      document.getElementById('loginText').classList.add('hidden');
+      document.getElementById('loginLoading').classList.remove('hidden');
+      document.getElementById('loginBtn').disabled = true;
+
+      try {
+        // This will be replaced with actual Supabase auth call
+        // For now, simulate a login attempt
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Show success message
+        if (window.showToast) {
+          window.showToast('Login successful! Redirecting...', 'success');
+        }
+
+        // Redirect to home after successful login
+        setTimeout(() => {
+          window.location.href = 'home.html';
+        }, 1500);
+
+      } catch (error) {
+        // Show error
+        document.getElementById('loginError').textContent = error.message || 'Login failed. Please try again.';
+        document.getElementById('loginError').classList.remove('hidden');
+      } finally {
+        // Reset button state
+        document.getElementById('loginText').classList.remove('hidden');
+        document.getElementById('loginLoading').classList.add('hidden');
+        document.getElementById('loginBtn').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

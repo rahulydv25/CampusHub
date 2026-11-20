@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Admin Dashboard - Manage resources and platform content">
+  <title>Admin Dashboard - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="admin.html" class="nav-link active">Admin</a></li>
+        <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Admin Dashboard</h1>
+      <p class="page-subtitle">Manage resources, approvals, and platform content</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Access Denied Message -->
+    <div id="accessDenied" class="alert alert-danger mb-xl hidden">
+      <p><strong>Access Denied:</strong> You do not have permission to access this page.</p>
+      <a href="home.html" class="btn btn-primary btn-sm mt-sm">Return to Home</a>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="adminContent">
+      <!-- Stats Overview -->
+      <section class="mb-xl">
+        <div class="grid grid-cols-4 gap-lg">
+          <div class="card text-center">
+            <div class="card-body">
+              <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--color-navy-primary);" id="totalResources">0</div>
+              <div class="text-sm text-muted">Total Resources</div>
+            </div>
+          </div>
+          <div class="card text-center">
+            <div class="card-body">
+              <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--color-warning);" id="pendingResources">0</div>
+              <div class="text-sm text-muted">Pending Review</div>
+            </div>
+          </div>
+          <div class="card text-center">
+            <div class="card-body">
+              <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--color-success);" id="approvedResources">0</div>
+              <div class="text-sm text-muted">Approved</div>
+            </div>
+          </div>
+          <div class="card text-center">
+            <div class="card-body">
+              <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--color-danger);" id="rejectedResources">0</div>
+              <div class="text-sm text-muted">Rejected</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sidebar Layout -->
+      <div class="sidebar-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <ul class="sidebar-menu">
+            <li class="sidebar-menu-item">
+              <a href="#pending-section" class="sidebar-menu-link active">Pending Submissions</a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#approved-section" class="sidebar-menu-link">Approved Resources</a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#rejected-section" class="sidebar-menu-link">Rejected Resources</a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#notices-section" class="sidebar-menu-link">Manage Notices</a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#events-section" class="sidebar-menu-link">Manage Events</a>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+          <!-- Pending Submissions -->
+          <section class="mb-xl" id="pending-section">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Pending Submissions</h2>
+              </div>
+              <div class="card-body">
+                <div id="pendingSubmissions">
+                  <!-- Pending resources will be loaded here -->
+                  <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <div class="empty-state-title">No pending submissions</div>
+                    <div class="empty-state-text">All caught up!</div>
+                  </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="pendingLoading" class="text-center py-xl hidden">
+                  <div class="loading loading-lg"></div>
+                  <p class="mt-md text-muted">Loading pending submissions...</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Approved Resources -->
+          <section class="mb-xl" id="approved-section">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Approved Resources</h2>
+              </div>
+              <div class="card-body">
+                <div id="approvedResourcesList">
+                  <!-- Approved resources will be loaded here -->
+                  <div class="empty-state">
+                    <div class="empty-state-icon">✅</div>
+                    <div class="empty-state-title">No approved resources yet</div>
+                    <div class="empty-state-text">Approved resources will appear here</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Rejected Resources -->
+          <section class="mb-xl" id="rejected-section">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Rejected Resources</h2>
+              </div>
+              <div class="card-body">
+                <div id="rejectedResourcesList">
+                  <!-- Rejected resources will be loaded here -->
+                  <div class="empty-state">
+                    <div class="empty-state-icon">❌</div>
+                    <div class="empty-state-title">No rejected resources</div>
+                    <div class="empty-state-text">Rejected resources will appear here</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Manage Notices -->
+          <section class="mb-xl" id="notices-section">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Manage College Notices</h2>
+              </div>
+              <div class="card-body">
+                <!-- Add Notice Form -->
+                <form id="addNoticeForm" class="mb-xl">
+                  <div class="form-group">
+                    <label class="form-label" for="noticeTitle">Notice Title *</label>
+                    <input type="text" class="form-control" id="noticeTitle" required placeholder="e.g., Semester Examination Schedule">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="noticeBody">Notice Content *</label>
+                    <textarea class="form-control" id="noticeBody" rows="4" required placeholder="Enter the full notice content..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Publish Notice</button>
+                </form>
+
+                <!-- Existing Notices -->
+                <h3 class="mb-lg">Published Notices</h3>
+                <div id="noticesList">
+                  <!-- Notices will be loaded here -->
+                  <div class="empty-state">
+                    <div class="empty-state-icon">📢</div>
+                    <div class="empty-state-title">No notices published</div>
+                    <div class="empty-state-text">Published notices will appear here</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Manage Events -->
+          <section class="mb-xl" id="events-section">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Manage Academic Events</h2>
+              </div>
+              <div class="card-body">
+                <p class="text-sm text-muted mb-lg">
+                  For detailed event management, use the <a href="calendar.html" style="color: var(--color-navy-light);">Calendar page</a>.
+                </p>
+
+                <!-- Quick Event Stats -->
+                <div class="grid grid-cols-2 gap-md mb-lg">
+                  <div class="card" style="background-color: var(--color-blue-light);">
+                    <div class="card-body text-center">
+                      <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-navy-primary);" id="totalEvents">0</div>
+                      <div class="text-sm">Total Events</div>
+                    </div>
+                  </div>
+                  <div class="card" style="background-color: var(--color-blue-light);">
+                    <div class="card-body text-center">
+                      <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-navy-primary);" id="upcomingEvents">0</div>
+                      <div class="text-sm">Upcoming Events</div>
+                    </div>
+                  </div>
+                </div>
+
+                <a href="calendar.html" class="btn btn-secondary btn-block">Go to Calendar Management</a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Sidebar menu active state
+    document.querySelectorAll('.sidebar-menu-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        document.querySelectorAll('.sidebar-menu-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('Are you sure you want to logout?')) {
+        // This will be connected to actual logout logic
+        window.location.href = 'home.html';
+      }
+    });
+
+    // Add notice form (placeholder)
+    document.getElementById('addNoticeForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('noticeTitle').value.trim();
+      const body = document.getElementById('noticeBody').value.trim();
+
+      if (!title || !body) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      try {
+        // This will be connected to backend
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        if (window.showToast) {
+          window.showToast('Notice published successfully!', 'success');
+        }
+
+        // Reset form
+        this.reset();
+
+        // Reload notices
+        if (window.loadNotices) {
+          window.loadNotices();
+        }
+
+      } catch (error) {
+        alert('Failed to publish notice. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

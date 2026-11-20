@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Home Dashboard - Your college academic resource portal">
+  <title>Home - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link active">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="admin.html" class="nav-link hidden" id="adminLink">Admin</a></li>
+        <li><a href="login.html" class="nav-link" id="loginLink">Login</a></li>
+        <li><a href="#" class="nav-link hidden" id="logoutLink">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Welcome to CampusHub</h1>
+      <p class="page-subtitle">Find and share academic resources for your college</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Search Bar -->
+    <div class="search-bar mb-xl">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+      </svg>
+      <input type="text" class="search-input" placeholder="Search for notes, PYQs, lab manuals, subjects..." id="globalSearch">
+    </div>
+
+    <!-- Quick Access Cards -->
+    <section class="mb-xl">
+      <h2 class="mb-lg">Quick Access</h2>
+      <div class="grid grid-cols-3 gap-lg">
+        <a href="resources.html?category=notes" class="quick-access-card">
+          <div class="quick-access-icon">📝</div>
+          <h3 class="quick-access-title">Notes</h3>
+          <p class="quick-access-count">View all notes</p>
+        </a>
+        <a href="resources.html?category=pyq" class="quick-access-card">
+          <div class="quick-access-icon">📄</div>
+          <h3 class="quick-access-title">PYQs</h3>
+          <p class="quick-access-count">Previous year papers</p>
+        </a>
+        <a href="resources.html?category=lab_manual" class="quick-access-card">
+          <div class="quick-access-icon">🔬</div>
+          <h3 class="quick-access-title">Lab Manuals</h3>
+          <p class="quick-access-count">Lab resources</p>
+        </a>
+        <a href="resources.html?category=assignment" class="quick-access-card">
+          <div class="quick-access-icon">📚</div>
+          <h3 class="quick-access-title">Assignments</h3>
+          <p class="quick-access-count">Assignment solutions</p>
+        </a>
+        <a href="leaderboard.html" class="quick-access-card">
+          <div class="quick-access-icon">🏆</div>
+          <h3 class="quick-access-title">Leaderboard</h3>
+          <p class="quick-access-count">Top contributors</p>
+        </a>
+        <a href="upload.html" class="quick-access-card">
+          <div class="quick-access-icon">⬆️</div>
+          <h3 class="quick-access-title">Upload</h3>
+          <p class="quick-access-count">Share resources</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-2 gap-xl">
+      <!-- Left Column -->
+      <div>
+        <!-- Semester Shortcuts -->
+        <section class="mb-xl">
+          <h2 class="mb-lg">Browse by Semester</h2>
+          <div class="grid grid-cols-2 gap-md">
+            <a href="resources.html?semester=1" class="btn btn-secondary">Semester 1</a>
+            <a href="resources.html?semester=2" class="btn btn-secondary">Semester 2</a>
+            <a href="resources.html?semester=3" class="btn btn-secondary">Semester 3</a>
+            <a href="resources.html?semester=4" class="btn btn-secondary">Semester 4</a>
+            <a href="resources.html?semester=5" class="btn btn-secondary">Semester 5</a>
+            <a href="resources.html?semester=6" class="btn btn-secondary">Semester 6</a>
+            <a href="resources.html?semester=7" class="btn btn-secondary">Semester 7</a>
+            <a href="resources.html?semester=8" class="btn btn-secondary">Semester 8</a>
+          </div>
+        </section>
+
+        <!-- Recent Resources -->
+        <section class="mb-xl">
+          <div class="flex justify-between items-center mb-lg">
+            <h2>Recently Added</h2>
+            <a href="resources.html" class="btn btn-sm btn-secondary">View All</a>
+          </div>
+          <div id="recentResources">
+            <!-- Resources will be loaded dynamically -->
+            <div class="empty-state">
+              <div class="empty-state-icon">📂</div>
+              <div class="empty-state-title">No resources yet</div>
+              <div class="empty-state-text">Be the first to upload a resource!</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <!-- Upcoming Academic Dates -->
+        <section class="mb-xl">
+          <div class="flex justify-between items-center mb-lg">
+            <h2>Upcoming Dates</h2>
+            <a href="calendar.html" class="btn btn-sm btn-secondary">View Calendar</a>
+          </div>
+          <div id="upcomingDates">
+            <!-- Events will be loaded dynamically -->
+            <div class="empty-state">
+              <div class="empty-state-icon">📅</div>
+              <div class="empty-state-title">No upcoming events</div>
+              <div class="empty-state-text">Check back later for updates</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Latest Notices -->
+        <section class="mb-xl">
+          <div class="flex justify-between items-center mb-lg">
+            <h2>College Notices</h2>
+          </div>
+          <div id="collegeNotices">
+            <!-- Notices will be loaded dynamically -->
+            <div class="empty-state">
+              <div class="empty-state-icon">📢</div>
+              <div class="empty-state-title">No notices</div>
+              <div class="empty-state-text">Stay tuned for announcements</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize authentication
+    auth.initAuth();
+
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Search functionality (placeholder - will be connected to backend)
+    document.getElementById('globalSearch').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const query = this.value.trim();
+        if (query) {
+          window.location.href = `resources.html?search=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

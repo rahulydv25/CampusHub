@@ -1,0 +1,254 @@
+/* CampusHub Responsive Design */
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Navigation */
+  .navbar-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    flex-direction: column;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-md);
+  }
+
+  .navbar-nav.open {
+    display: flex;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .search-bar {
+    max-width: 100%;
+    order: 3;
+    margin-top: var(--spacing-md);
+  }
+
+  /* Grid */
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar Layout */
+  .sidebar-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  /* Typography */
+  h1 { font-size: var(--font-size-3xl); }
+  h2 { font-size: var(--font-size-2xl); }
+  h3 { font-size: var(--font-size-xl); }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-sm {
+    width: auto;
+  }
+
+  /* Tables */
+  .leaderboard-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Toast */
+  .toast-container {
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    top: var(--spacing-md);
+  }
+
+  .toast {
+    min-width: auto;
+  }
+
+  /* Quick Access Cards */
+  .quick-access-card {
+    padding: var(--spacing-lg);
+  }
+
+  /* Filter Pills */
+  .filter-container {
+    gap: var(--spacing-xs);
+  }
+
+  .filter-pill {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Typography */
+  h1 { font-size: var(--font-size-2xl); }
+  h2 { font-size: var(--font-size-xl); }
+  h3 { font-size: var(--font-size-lg); }
+
+  /* Cards */
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  /* Forms */
+  .form-control {
+    padding: var(--spacing-sm);
+  }
+
+  /* Navbar */
+  .navbar-brand {
+    font-size: var(--font-size-lg);
+  }
+
+  .navbar-logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Resource Cards */
+  .resource-card {
+    padding: var(--spacing-md);
+  }
+
+  .resource-card-header {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .resource-card-footer {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+
+  .resource-card-actions {
+    justify-content: stretch;
+  }
+
+  .resource-card-actions .btn {
+    flex: 1;
+  }
+
+  /* Leaderboard Table - Make it scrollable */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Calendar Events */
+  .calendar-event {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Quick Access */
+  .quick-access-icon {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quick-access-title {
+    font-size: var(--font-size-base);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* Large Desktop (1400px and above) */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+
+  .container-lg {
+    max-width: 1600px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navbar,
+  .btn,
+  .filter-container,
+  .sidebar {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid var(--color-gray-300);
+  }
+
+  body {
+    background-color: var(--color-white);
+  }
+}
+
+/* Dark Mode Support (optional) */
+@media (prefers-color-scheme: dark) {
+  /* Note: CampusHub uses a light theme by default.
+     Dark mode can be added here if needed in the future. */
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-gray-200: #000000;
+    --color-gray-300: #000000;
+  }
+
+  .card,
+  .btn {
+    border-width: 2px;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .navbar-nav {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+}

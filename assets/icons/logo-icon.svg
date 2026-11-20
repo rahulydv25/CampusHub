@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Graduation Cap with Book -->
+  <g transform="translate(50, 50)">
+    <!-- Cap Top -->
+    <polygon points="-30,-12 0,-24 30,-12 0,0" fill="#1e3a5f" />
+    <!-- Cap Bottom -->
+    <polygon points="-30,-12 -30,0 0,12 30,0 30,-12" fill="#2d5a8a" />
+    <!-- Tassel -->
+    <line x1="0" y1="-24" x2="0" y2="-32" stroke="#1e3a5f" stroke-width="2" />
+    <circle cx="0" cy="-32" r="2.5" fill="#ffd700" />
+  </g>
+
+  <!-- Open Book below -->
+  <g transform="translate(50, 72)">
+    <!-- Left Page -->
+    <path d="M-28,10 Q-15,3 0,10 L0,22 Q-15,15 -28,22 Z" fill="#1e3a5f" />
+    <!-- Right Page -->
+    <path d="M28,10 Q15,3 0,10 L0,22 Q15,15 28,22 Z" fill="#2d5a8a" />
+    <!-- Book Spine -->
+    <line x1="0" y1="10" x2="0" y2="22" stroke="#1e3a5f" stroke-width="1.5" />
+  </g>
+</svg>

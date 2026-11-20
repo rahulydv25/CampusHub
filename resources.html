@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Resource Library - Browse and download academic resources">
+  <title>Resources - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link active">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="admin.html" class="nav-link hidden" id="adminLink">Admin</a></li>
+        <li><a href="login.html" class="nav-link" id="loginLink">Login</a></li>
+        <li><a href="#" class="nav-link hidden" id="logoutLink">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Resource Library</h1>
+      <p class="page-subtitle">Browse and download academic resources</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Search and Filters -->
+    <section class="mb-xl">
+      <div class="search-bar mb-lg">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+        </svg>
+        <input type="text" class="search-input" placeholder="Search by title, subject, keyword..." id="resourceSearch">
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-container" id="activeFilters">
+        <!-- Active filters will appear here -->
+      </div>
+
+      <div class="grid grid-cols-4 gap-md mb-lg">
+        <div class="form-group mb-0">
+          <label class="form-label" for="semesterFilter">Semester</label>
+          <select class="form-control" id="semesterFilter">
+            <option value="">All Semesters</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-0">
+          <label class="form-label" for="departmentFilter">Department</label>
+          <select class="form-control" id="departmentFilter">
+            <option value="">All Departments</option>
+            <option value="CSE">Computer Science</option>
+            <option value="ECE">Electronics & Communication</option>
+            <option value="EEE">Electrical & Electronics</option>
+            <option value="MECH">Mechanical</option>
+            <option value="CIVIL">Civil</option>
+            <option value="IT">Information Technology</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-0">
+          <label class="form-label" for="categoryFilter">Category</label>
+          <select class="form-control" id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="notes">Class Notes</option>
+            <option value="pyq">Previous Year QP</option>
+            <option value="lab_manual">Lab Manual</option>
+            <option value="assignment">Assignment</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group mb-0">
+          <label class="form-label" for="sortBy">Sort By</label>
+          <select class="form-control" id="sortBy">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="most_downloaded">Most Downloaded</option>
+            <option value="title_asc">Title (A-Z)</option>
+            <option value="title_desc">Title (Z-A)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button class="btn btn-secondary btn-sm" id="resetFilters">Reset Filters</button>
+        <p class="text-sm text-muted" id="resultCount">Showing 0 resources</p>
+      </div>
+    </section>
+
+    <!-- Resource Grid -->
+    <section>
+      <div class="grid grid-cols-3 gap-lg" id="resourceGrid">
+        <!-- Resources will be loaded dynamically -->
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <div class="empty-state-icon">📂</div>
+          <div class="empty-state-title">No resources found</div>
+          <div class="empty-state-text">Try adjusting your filters or be the first to upload!</div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="text-center py-xl hidden">
+        <div class="loading loading-lg"></div>
+        <p class="mt-md text-muted">Loading resources...</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/resources.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize authentication
+    auth.initAuth();
+  </script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

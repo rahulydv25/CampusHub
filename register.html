@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusHub Registration - Create your account">
+  <title>Register - CampusHub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="home.html" class="navbar-brand">
+        <img src="assets/icons/logo-icon.svg" alt="CampusHub" class="navbar-logo">
+        CampusHub
+      </a>
+
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        ☰
+      </button>
+
+      <ul class="navbar-nav">
+        <li><a href="home.html" class="nav-link">Home</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="leaderboard.html" class="nav-link">Leaderboard</a></li>
+        <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+        <li><a href="upload.html" class="nav-link">Upload</a></li>
+        <li><a href="login.html" class="nav-link">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Register</h1>
+      <p class="page-subtitle">Create your CampusHub account</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="container-sm">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Create Account</h2>
+        </div>
+        <div class="card-body">
+          <!-- Registration Form -->
+          <form id="registerForm">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label class="form-label" for="fullName">Full Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                name="fullName"
+                required
+                placeholder="John Doe"
+                maxlength="100"
+                autocomplete="name"
+              >
+            </div>
+
+            <!-- College ID -->
+            <div class="form-group">
+              <label class="form-label" for="collegeId">College ID *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="collegeId"
+                name="collegeId"
+                required
+                placeholder="e.g., 2023CS101"
+                maxlength="20"
+              >
+              <small class="text-muted text-sm">Your official college roll number or ID</small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="registerEmail">Email Address *</label>
+              <input
+                type="email"
+                class="form-control"
+                id="registerEmail"
+                name="email"
+                required
+                placeholder="your.email@college.edu"
+                autocomplete="email"
+              >
+              <small class="text-muted text-sm">Use your college email address</small>
+            </div>
+
+            <!-- Department -->
+            <div class="form-group">
+              <label class="form-label" for="registerDepartment">Department *</label>
+              <select class="form-control" id="registerDepartment" name="department" required>
+                <option value="">Select Department</option>
+                <option value="CSE">Computer Science & Engineering</option>
+                <option value="ECE">Electronics & Communication</option>
+                <option value="EEE">Electrical & Electronics</option>
+                <option value="MECH">Mechanical Engineering</option>
+                <option value="CIVIL">Civil Engineering</option>
+                <option value="IT">Information Technology</option>
+              </select>
+            </div>
+
+            <!-- Semester -->
+            <div class="form-group">
+              <label class="form-label" for="registerSemester">Current Semester *</label>
+              <select class="form-control" id="registerSemester" name="semester" required>
+                <option value="">Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" for="registerPassword">Password *</label>
+              <div class="flex gap-sm">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="registerPassword"
+                  name="password"
+                  required
+                  placeholder="Create a password"
+                  autocomplete="new-password"
+                >
+                <button type="button" class="btn btn-secondary" id="togglePassword" aria-label="Toggle password visibility">
+                  👁️
+                </button>
+              </div>
+              <small class="text-muted text-sm">Minimum 6 characters</small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+              <label class="form-label" for="confirmPassword">Confirm Password *</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                name="confirmPassword"
+                required
+                placeholder="Re-enter your password"
+                autocomplete="new-password"
+              >
+            </div>
+
+            <!-- Terms Agreement -->
+            <div class="form-group">
+              <label class="flex items-start gap-sm">
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" required style="margin-top: 4px;">
+                <span class="text-sm">
+                  I agree to the CampusHub terms of service and privacy policy. I understand that I must use this platform responsibly and only share academic materials I have permission to distribute.
+                </span>
+              </label>
+            </div>
+
+            <!-- Error Message -->
+            <div id="registerError" class="alert alert-danger hidden">
+              <!-- Error messages will appear here -->
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group mb-0">
+              <button type="submit" class="btn btn-primary btn-block" id="registerBtn">
+                <span id="registerText">Create Account</span>
+                <span id="registerLoading" class="loading hidden"></span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Divider -->
+          <div class="text-center my-lg">
+            <span class="text-muted text-sm">or</span>
+          </div>
+
+          <!-- Login Link -->
+          <div class="text-center">
+            <p class="text-sm text-muted">
+              Already have an account?
+              <a href="login.html" class="btn btn-sm btn-secondary">Login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration Tips -->
+      <div class="card mt-xl">
+        <div class="card-header">
+          <h3 class="card-title">Registration Tips</h3>
+        </div>
+        <div class="card-body">
+          <ul style="list-style-position: inside; line-height: 2;">
+            <li>Use your official college email address for verification</li>
+            <li>Enter your correct college ID for identification</li>
+            <li>Choose a strong password with at least 6 characters</li>
+            <li>Select your current department and semester accurately</li>
+            <li>You can update your profile information later</li>
+            <li>Administrator role is assigned by college administration only</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-top mt-xl" style="padding: var(--spacing-xl) 0; background-color: var(--color-white);">
+    <div class="container text-center">
+      <p class="text-muted text-sm">© 2026 CampusHub. Made by students, for students.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('registerPassword');
+      const toggleBtn = this;
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+      }
+    });
+
+    // Password strength indicator
+    document.getElementById('registerPassword').addEventListener('input', function() {
+      const password = this.value;
+      const strengthDiv = document.getElementById('passwordStrength') || createPasswordStrengthDiv();
+
+      let strength = 0;
+      if (password.length >= 6) strength++;
+      if (password.length >= 10) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      const messages = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+      const colors = ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#007bff'];
+
+      strengthDiv.textContent = `Password Strength: ${messages[strength - 1] || 'Very Weak'}`;
+      strengthDiv.style.color = colors[strength - 1] || '#dc3545';
+    });
+
+    function createPasswordStrengthDiv() {
+      const div = document.createElement('div');
+      div.id = 'passwordStrength';
+      div.className = 'text-sm mt-sm';
+      div.style.fontWeight = '600';
+      document.getElementById('registerPassword').parentNode.after(div);
+      return div;
+    }
+
+    // Registration form submission (placeholder - will be connected to Supabase Auth)
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const collegeId = document.getElementById('collegeId').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const department = document.getElementById('registerDepartment').value;
+      const semester = document.getElementById('registerSemester').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const agreeTerms = document.getElementById('agreeTerms').checked;
+
+      // Clear previous error
+      document.getElementById('registerError').classList.add('hidden');
+
+      // Basic validation
+      if (!fullName || !collegeId || !email || !department || !semester || !password || !confirmPassword) {
+        document.getElementById('registerError').textContent = 'Please fill in all required fields.';
+        document.getElementById('registerError').classList.remove('hidden');
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('registerError').textContent = 'Please enter a valid email address.';
+        document.getElementById('registerError').classList.remove('hidden');
+        return;
+      }
+
+      // Password validation
+      if (password.length < 6) {
+        document.getElementById('registerError').textContent = 'Password must be at least 6 characters long.';
+        document.getElementById('registerError').classList.remove('hidden');
+        return;
+      }
+
+      // Password match validation
+      if (password !== confirmPassword) {
+        document.getElementById('registerError').textContent = 'Passwords do not match.';
+        document.getElementById('registerError').classList.remove('hidden');
+        return;
+      }
+
+      // Terms agreement validation
+      if (!agreeTerms) {
+        document.getElementById('registerError').textContent = 'You must agree to the terms and conditions.';
+        document.getElementById('registerError').classList.remove('hidden');
+        return;
+      }
+
+      // Show loading state
+      document.getElementById('registerText').classList.add('hidden');
+      document.getElementById('registerLoading').classList.remove('hidden');
+      document.getElementById('registerBtn').disabled = true;
+
+      try {
+        // This will be replaced with actual Supabase auth call
+        // For now, simulate a registration attempt
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Show success message
+        if (window.showToast) {
+          window.showToast('Registration successful! Please check your email to verify your account.', 'success');
+        }
+
+        // Redirect to login after successful registration
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+
+      } catch (error) {
+        // Show error
+        document.getElementById('registerError').textContent = error.message || 'Registration failed. Please try again.';
+        document.getElementById('registerError').classList.remove('hidden');
+      } finally {
+        // Reset button state
+        document.getElementById('registerText').classList.remove('hidden');
+        document.getElementById('registerLoading').classList.add('hidden');
+        document.getElementById('registerBtn').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
